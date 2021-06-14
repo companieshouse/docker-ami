@@ -1,0 +1,2 @@
+# ami-repository-template
+
