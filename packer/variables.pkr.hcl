@@ -11,7 +11,7 @@ variable "ami_name_prefix" {
 
 variable "ansible_host_alias" {
   type        = string
-  default     = "docker-ami"
+  default     = "docker-vm"
   description = "The Ansible host alias"
 }
 
