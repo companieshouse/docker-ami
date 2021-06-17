@@ -89,3 +89,9 @@ variable "kms_key_id" {
   default     = null
   description = "KMS key ID, arn or alias to use for root volume encryption in the main region. If encrypt_boot is true and this is left null, the AWS default key is used"
 }
+
+variable "nagios_api_key" {
+  type        = string
+  default     = ""
+  description = "This key will be supplied to the Nagios agent Ansible role to populate jinja templates"
+}
