@@ -42,6 +42,5 @@ source "amazon-ebs" "builder" {
 
   tags = {
     Name    = "${var.ami_name_prefix}-${var.version}"
-    Builder = "packer-{{packer_version}}"
   }
 }
