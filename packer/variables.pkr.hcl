@@ -17,7 +17,7 @@ variable "ansible_host_alias" {
 
 variable "aws_instance_type" {
   type        = string
-  default     = "t2.medium"
+  default     = "t3.medium"
   description = "The EC2 instance type used when building the AMI"
 }
 
