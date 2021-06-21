@@ -41,7 +41,7 @@ variable "aws_source_ami_filter_version" {
 
 variable "aws_source_ami_owner_id" {
   type        = string
-  default     = "169942020521"
+  default     = "self"
   description = "The source AMI owner ID; used in combination with aws_source_ami_filter_name to filter for matching source AMIs"
 }
 
