@@ -1,0 +1,35 @@
+---
+- name: configure / Update yum packages
+  yum:
+    name: '*'
+    state: latest
+    update_cache: yes
+
+- name: Remove /etc/yum.repos.d/docker-ce.repo as will resolve to invalid repo path with Amazon Linux 2
+  ansible.builtin.file:
+    path: /etc/yum.repos.d/docker-ce.repo
+    state: absent
+
+- name: install docker using yum
+  yum:
+    name: docker
+    state: latest
+
+- name: Add the ec2-user to the docker group
+  ansible.builtin.user:
+    name: ec2-user
+    groups: docker
+    append: yes
+
+- name: service docker
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Download docker-compose binary
+  get_url:
+    url: https://github.com/docker/compose/releases/latest/download/docker-compose-Linux-x86_64
+    dest: /usr/local/bin/docker-compose
+    mode: '0755'
+

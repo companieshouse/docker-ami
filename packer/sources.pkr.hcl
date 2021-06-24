@@ -25,7 +25,7 @@ source "amazon-ebs" "builder" {
   source_ami_filter {
     filters = {
       virtualization-type = "hvm"
-      name =  "${var.aws_source_ami_filter_name}"
+      name =  "${var.aws_source_ami_filter_name}-${var.aws_source_ami_filter_version}"
       root-device-type = "ebs"
     }
     owners = ["${var.aws_source_ami_owner_id}"]
@@ -42,6 +42,5 @@ source "amazon-ebs" "builder" {
 
   tags = {
     Name    = "${var.ami_name_prefix}-${var.version}"
-    Builder = "packer-{{packer_version}}"
   }
 }
