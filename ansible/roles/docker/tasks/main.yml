@@ -10,8 +10,10 @@
     path: /etc/yum.repos.d/docker-ce.repo
     state: absent
 
-- name: install docker using amazon-linux-extras
-  command: amazon-linux-extras install docker -y
+- name: install docker using yum
+  yum:
+    name: docker
+    state: latest
 
 - name: Add the ec2-user to the docker group
   ansible.builtin.user:
