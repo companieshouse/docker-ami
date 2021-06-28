@@ -38,7 +38,7 @@ if (( $? != 0 )) ; then
 fi
 
 # create server instance directory 
-mkdir -p ${INSTANCE_DIR}/${APP_INSTANCE_NAME}
+mkdir -p ${INSTANCE_DIR}/${APP_INSTANCE_NAME}/running-servers
 cd ${INSTANCE_DIR}/${APP_INSTANCE_NAME}
 # Copy properties, docker-compose file, app versions, etc. recursively to current directory
 aws s3 cp ${CONFIG_BASE_PATH}/ ./ --recursive --exclude "*/*"
