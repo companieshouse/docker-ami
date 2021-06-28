@@ -1,0 +1,6 @@
+---
+- name: Copy bootstrap script
+  copy:
+    src: "boot-strap.sh"
+    dest: "/usr/local/bin/bootstrap"
+    mode: 0755
