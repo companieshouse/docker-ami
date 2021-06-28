@@ -1,23 +1,22 @@
 #!/bin/bash
-### COMMENTS  #############################
-# I am a script to start WebLogic Admin and Managed Servers using Docker Compose.  
-# I require values passed in from AMI, terraform, build, etc.  
-#   so I can retrieve correct config, build server directory structure,  pass versions to docker-compose 
-# Required meta data: 
-# - Code versions  
-# - Shared config buckert address
-# - Environment (Live, Stage, Dev)
-# - Instance (Server1 or 2, etc.)
+
+### Script to start WebLogic Admin and Managed Servers using Docker Compose.  
+### Requires values passed in from AMI and AWS cli commands   
+### Function is to retrieve correct config, build server directory structure, pass App versions to docker-compose, etc. 
+### Required meta data: 
+### - Code versions  
+### - Shared config buckert address
+### - Environment (Live, Stage, Dev)
+### - Instance (Server1 or 2, etc.)
 
 LOG=start-up.log
 echo " ~~~~~~ Starting Docker Compose wrapper script: `date -u "+%F %T"`" > $LOG
 set -a
 
-# Hard coded for now
+# WL Server parent directory name 
 INSTANCE_DIR="instance-dir"
 
-# Get WL_INSTANCE_NAME - what are we : server1, server2, EF, etc. ?
-# Get EC2 instance id
+# Get EC2_INSTANCE_ID - example server1, server2, etc.
 EC2_INSTANCE_ID=`ec2-metadata -i |  awk -F'[: ]' '{print $3}'`
 echo "EC2_INSTANCE_ID=${EC2_INSTANCE_ID}" | tee -a $LOG
 
@@ -51,8 +50,16 @@ aws s3 cp ${CONFIG_BASE_PATH}/${APP_INSTANCE_NAME} ./${INSTANCE_DIR}/${APP_INSTA
 
 echo "`env`" | grep IMAGE | tee -a $LOG
 
-# Log in to ECR ??? values passed in or hard coded ???
-aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 169942020521.dkr.ecr.eu-west-2.amazonaws.com
+# Get ECR Repo details and log into ECR
+AWS_ECR_REPO_DOMAIN=amazonaws.com
+# Loop through each distinct AWS repo and login
+for AWS_ECR_REPO in $( grep ${AWS_ECR_REPO_DOMAIN} app-image-versions | sed 's/.*=\(.*\)\/.*/\1/' | uniq )
+do
+  AWS_ECR_REGION=$( echo ${AWS_ECR_REPO/.${AWS_ECR_REPO_DOMAIN}} | sed 's/.*\.//' )
+  echo Logging into: ${AWS_ECR_REGION} ${AWS_ECR_REPO}
+  aws ecr get-login-password --region ${AWS_ECR_REGION} | docker login --username AWS --password-stdin ${AWS_ECR_REPO}
+done
+
 set +a
 
 ### RUN DOCKER COMPOSE
