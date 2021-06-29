@@ -9,8 +9,8 @@
 ### - Environment (Live, Stage, Dev)
 ### - Instance (Server1 or 2, etc.)
 
-LOG=start-up.log
-echo " ~~~~~~ Starting Docker Compose wrapper script: `date -u "+%F %T"`" > $LOG
+exec >> ~/start-up.log 2>&1
+echo " ~~~~~~~~~ Starting Docker Compose wrapper script: `date -u "+%F %T"`" 
 set -a
 
 # WL Server parent directory name 
@@ -19,27 +19,28 @@ EC2_REGION=$( ec2-metadata -z | awk '{print $2}' | sed 's/[a-z]$//' )
 
 # Get EC2_INSTANCE_ID - example server1, server2, etc.
 EC2_INSTANCE_ID=$( ec2-metadata -i |  awk -F'[: ]' '{print $3}' )
-echo "EC2_INSTANCE_ID=${EC2_INSTANCE_ID}" | tee -a $LOG
+echo "EC2_INSTANCE_ID=${EC2_INSTANCE_ID}" 
 
 # Get TAG passed in via AMI, terraform, build, etc 
 APP_INSTANCE_NAME=$( aws ec2 describe-tags --filters "Name=resource-id,Values=${EC2_INSTANCE_ID}" --region ${EC2_REGION} --output text|grep app-instance-name|  awk '{print $5}' )
-echo "APP_INSTANCE_NAME=${APP_INSTANCE_NAME}" | tee -a $LOG
+echo "APP_INSTANCE_NAME=${APP_INSTANCE_NAME}" 
 
 # Get confog base path
 CONFIG_BASE_PATH=$( aws ec2 describe-tags --filters "Name=resource-id,Values=${EC2_INSTANCE_ID}" --region ${EC2_REGION} --output text|grep config-base-path|  awk '{print $5}' )
-echo "CONFIG_BASE_PATH=${CONFIG_BASE_PATH}" | tee -a $LOG
+echo "CONFIG_BASE_PATH=${CONFIG_BASE_PATH}" 
 
 # Check S3 and Config can be reached 
 aws s3 ls ${CONFIG_BASE_PATH} >/dev/null
 
 if (( $? != 0 )) ; then
-  echo "ERROR - S3 or Config can not be found. Exit. " | tee -a $LOG
+  echo "ERROR - S3 or Config can not be found. Exit. " 
   exit 1
 fi
 
 # create server instance directory 
 mkdir -p ${INSTANCE_DIR}/${APP_INSTANCE_NAME}/running-servers
 cd ${INSTANCE_DIR}/${APP_INSTANCE_NAME}
+
 # Copy properties, docker-compose file, app versions, etc. recursively to current directory
 aws s3 cp ${CONFIG_BASE_PATH}/ ./ --recursive --exclude "*/*"
 aws s3 cp ${CONFIG_BASE_PATH}/${APP_INSTANCE_NAME}/ ./ --recursive --exclude "*/*"
@@ -49,7 +50,7 @@ aws s3 cp ${CONFIG_BASE_PATH}/${APP_INSTANCE_NAME}/ ./ --recursive --exclude "*/
 # CIC_APP_IMAGE
 . app-image-versions
 
-echo "`env`" | grep IMAGE | tee -a $LOG
+echo "`env`" | grep IMAGE 
 
 # Get ECR Repo details and log into ECR
 AWS_ECR_REPO_DOMAIN=amazonaws.com
@@ -64,5 +65,5 @@ done
 set +a
 
 ### RUN DOCKER COMPOSE
-echo "Starting docker compose file " | tee -a $LOG
+echo "Starting docker compose file ..." 
 docker-compose up -d
