@@ -14,7 +14,7 @@ echo " ~~~~~~~~~ Starting Docker Compose wrapper script: `date -u "+%F %T"`"
 set -a
 
 # WL Server parent directory name 
-INSTANCE_DIR="instance-dir"
+INSTANCE_DIR="/mnt/nfs/cics"
 EC2_REGION=$( ec2-metadata -z | awk '{print $2}' | sed 's/[a-z]$//' )
 
 # Get EC2_INSTANCE_ID - example server1, server2, etc.
