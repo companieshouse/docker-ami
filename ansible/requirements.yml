@@ -1,5 +1,5 @@
 ---
 collections:
   - name: git@github.com:companieshouse/ansible-collections.git#/ch_collections/heritage_services
-    version: 0.1.60
+    version: 0.1.61
     type: git
