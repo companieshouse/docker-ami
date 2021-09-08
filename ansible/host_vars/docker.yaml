@@ -1,0 +1,30 @@
+## Nagios Variables
+auto_register_client: true
+nagios_host: nagios.sharedservices.aws.internal
+server_template_name: !unsafe "{{ REPLACE }}" ## Gets replaced at Terraform level via userdata
+nrpe_command:
+  check_disk:
+    script: check_disk
+    option: $ARG1$
+  check_load:
+    script: check_load
+    option: $ARG1$
+  check_sshd:
+    sudo: true
+    script: check_service.sh
+    option: $ARG1$
+  check_crond:
+    sudo: true
+    script: check_service.sh
+    option: $ARG1$
+  check_httpd:
+    sudo: true
+    script: check_service.sh
+    option: $ARG1$
+  check_syslogd:
+    sudo: true
+    script: check_service.sh
+    option: $ARG1$
+  check_users:
+    script: check_users
+    option: $ARG1$
