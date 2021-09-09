@@ -1,3 +1,9 @@
+---
+
+selinux_status:
+  - policy: targeted
+    state: permissive
+
 ## Nagios Variables
 auto_register_client: true
 nagios_host: nagios.sharedservices.aws.internal
