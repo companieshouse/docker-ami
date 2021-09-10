@@ -46,5 +46,6 @@ nrpe_command:
     script: check_users
     option: $ARG1$
   check_docker:
+    sudo: true
     script: check_docker
     option: $ARG1$
