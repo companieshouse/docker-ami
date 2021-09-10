@@ -2,7 +2,7 @@
 
 selinux_status:
   - policy: targeted
-    state: permissive
+    state: enforcing
 
 ## Nagios Variables
 auto_register_client: true
