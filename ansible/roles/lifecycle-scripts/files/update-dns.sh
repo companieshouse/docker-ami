@@ -9,13 +9,13 @@
 echo " ~~~~~~~~~ Starting DNS update script: `date -u "+%F %T"`"
 
 ZONE_ID=$1
-if [ -z "${ZONE_ID}" ]; ; then 
+if [ -z "${ZONE_ID}" ]; then 
   echo "ZONE_ID is missing";
   exit 1
 fi
 
 FQDN=$2
-if [ -z "${FQDN}" ]; ; then 
+if [ -z "${FQDN}" ]; then 
   echo "FQDN is missing";
   exit 1
 fi
