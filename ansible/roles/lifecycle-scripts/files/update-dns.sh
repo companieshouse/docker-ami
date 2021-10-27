@@ -21,5 +21,5 @@ if [ -z "${FQDN}" ]; then
 fi
 
 IP=$( curl http://169.254.169.254/latest/meta-data/local-ipv4 )
-echo "{ \"Comment\": \"UPSERT host record for ${FQDN}\", \"Changes\": [{ \"Action\": \"CREATE\", \"ResourceRecordSet\": { \"Name\": \"${FQDN}\", \"Type\": \"A\", \"TTL\": 60, \"ResourceRecords\": [{ \"Value\": \"${IP}\"}] }}] }" > dns.json
+echo "{ \"Comment\": \"UPSERT host record for ${FQDN}\", \"Changes\": [{ \"Action\": \"UPSERT\", \"ResourceRecordSet\": { \"Name\": \"${FQDN}\", \"Type\": \"A\", \"TTL\": 60, \"ResourceRecords\": [{ \"Value\": \"${IP}\"}] }}] }" > dns.json
 aws route53 change-resource-record-sets --hosted-zone-id ${ZONE_ID} --change-batch file://dns.json
