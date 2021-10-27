@@ -4,3 +4,9 @@
     src: "boot-strap.sh"
     dest: "/usr/local/bin/bootstrap"
     mode: 0755
+
+- name: Copy dns script
+  copy:
+    src: "update-dns.sh"
+    dest: "/usr/local/bin/update-dns.sh"
+    mode: 0755
