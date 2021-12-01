@@ -1,0 +1,10 @@
+---
+- name: install sshfs using yum
+  yum:
+    name: fuse-sshfs
+    state: latest
+
+- name: Enable user_allow_other
+  ansible.builtin.lineinfile:
+    path: /etc/fuse.conf
+    line: user_allow_other
