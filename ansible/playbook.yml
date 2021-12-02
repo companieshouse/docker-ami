@@ -9,6 +9,7 @@
     - name: ch_collections.heritage_services.nfs
       vars:
         install_watcher_service: false
+    - sshfs
   tasks: 
     - name: Setup deployment playbook dependancies (1/2)  
       ansible.builtin.copy:
