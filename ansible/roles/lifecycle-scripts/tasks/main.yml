@@ -10,3 +10,9 @@
     src: "update-dns.sh"
     dest: "/usr/local/bin/update-dns.sh"
     mode: 0755
+
+- name: Copy WebLogic pre bootstrap script
+  copy:
+    src: "weblogic-pre-bootstrap.sh"
+    dest: "/usr/local/bin/weblogic-pre-bootstrap.sh"
+    mode: 0755
