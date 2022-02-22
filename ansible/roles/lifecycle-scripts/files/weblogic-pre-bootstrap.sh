@@ -37,9 +37,9 @@ do
 done
 
 echo move and copy back managed server FileStore
-for SERVER in wlserver1 wlserver2 wlserver3 wlserver4
+for FILESTORE in FileStore1 FileStore2 FileStore3 FileStore4
 do
-  cd ${INSTANCE_DIR}/${APP_INSTANCE_NAME}/running-servers/FileStores/JMS/FileStore1
+  cd ${INSTANCE_DIR}/${APP_INSTANCE_NAME}/running-servers/FileStores/JMS/${FILESTORE}
   for file in $( ls -1 *DAT )
   do
     mv $file $file.bak
