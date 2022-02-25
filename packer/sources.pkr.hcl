@@ -10,7 +10,7 @@ source "amazon-ebs" "builder" {
   iam_instance_profile = "packer-builders-${var.aws_region}"
 
   launch_block_device_mappings {
-    device_name = "/dev/sda1"
+    device_name = "/dev/xvda"
     volume_size = var.root_volume_size_gb
     volume_type = "gp2"
     delete_on_termination = true
