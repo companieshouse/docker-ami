@@ -4,6 +4,7 @@
   gather_facts: yes
   roles:
     - docker
+    - chrony
     - lifecycle-scripts
     - ch_collections.base.nagios_nrpe_client
     - name: ch_collections.heritage_services.nfs
