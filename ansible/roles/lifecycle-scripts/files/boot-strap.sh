@@ -57,9 +57,9 @@ aws s3 cp ${CONFIG_BASE_PATH}/${APP_INSTANCE_NAME}/ ./ --recursive --exclude "*/
 echo "`env`" | grep IMAGE
 
 # if crontab present, copy it into target (bind mounted) dir for availability in container
-if [ -f ./crontab.txt ]; then
+if [ $(ls ./crontab*.txt 2>/dev/null | wc -l) -gt 0 ]; then
   mkdir -p /home/ec2-user/cron/
-  cp ./crontab.txt /home/ec2-user/cron/
+  cp ./crontab*.txt /home/ec2-user/cron/
 fi
 
 # Get ECR Repo details and log into ECR
