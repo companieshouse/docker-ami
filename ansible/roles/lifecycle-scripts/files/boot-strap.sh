@@ -56,6 +56,12 @@ aws s3 cp ${CONFIG_BASE_PATH}/${APP_INSTANCE_NAME}/ ./ --recursive --exclude "*/
 
 echo "`env`" | grep IMAGE
 
+# if crontab present, copy it into target (bind mounted) dir for availability in container
+if [ -f ./crontab.txt ]; then
+  mkdir -p /home/ec2-user/cron/
+  cp ./crontab.txt /home/ec2-user/cron/
+fi
+
 # Get ECR Repo details and log into ECR
 AWS_ECR_REPO_DOMAIN=amazonaws.com
 # Loop through each distinct AWS repo and login
