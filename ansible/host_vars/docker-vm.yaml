@@ -4,6 +4,8 @@ selinux_status:
   - policy: targeted
     state: enforcing
 
+rsyslog_config_path: "/etc/audisp/plugins.d/syslog.conf"
+
 ## Nagios Variables
 auto_register_client: true
 nagios_host: nagios.sharedservices.aws.internal
