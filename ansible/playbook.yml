@@ -11,7 +11,15 @@
       vars:
         install_watcher_service: false
     - sshfs
-  tasks: 
+  tasks:
+    - name: Suppress auditd logging to rsyslog
+      ansible.builtin.lineinfile:
+        path:  "{{ rsyslog_config_path }}"
+        regexp: '^{{ item.key }}\s*=.*$'
+        line: "{{ item.key }} = {{ item.value }}"
+      with_dict: 
+        - active: "no"
+
     - name: Setup deployment playbook dependancies (1/2)  
       ansible.builtin.copy:
         src: "{{ item }}"
