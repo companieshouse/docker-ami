@@ -11,27 +11,8 @@ exec > >(tee -ai ~/start-up.log) 2>&1
 echo " ~~~~~~~~~ Starting Docker Compose wrapper script: `date -u "+%F %T"`"
 set -a
 
-NFS_MOUNT_LOCATION="/mnt/nfs"
-EC2_REGION=$( ec2-metadata -z | awk '{print $2}' | sed 's/[a-z]$//' )
-
-# Get EC2_INSTANCE_ID
-EC2_INSTANCE_ID=$( ec2-metadata -i |  awk -F'[: ]' '{print $3}' )
-echo "EC2_INSTANCE_ID=${EC2_INSTANCE_ID}"
-
-# Get ApplicationType TAG from EC2 instance
-APP_NAME=$( aws ec2 describe-tags --filters "Name=resource-id,Values=${EC2_INSTANCE_ID}" --region ${EC2_REGION} --output text|grep ApplicationType|  awk '{print $5}' | tr '[:upper:]' '[:lower:]' )
-echo "APP_NAME=${APP_NAME}"
-
-INSTANCE_DIR=${NFS_MOUNT_LOCATION}/${APP_NAME}
-echo "INSTANCE_DIR=${INSTANCE_DIR}"
-
-# Get app-instance-name TAG from EC2 instance
-APP_INSTANCE_NAME=$( aws ec2 describe-tags --filters "Name=resource-id,Values=${EC2_INSTANCE_ID}" --region ${EC2_REGION} --output text|grep app-instance-name|  awk '{print $5}' )
-echo "APP_INSTANCE_NAME=${APP_INSTANCE_NAME}"
-
-# Get config base path
-CONFIG_BASE_PATH=$( aws ec2 describe-tags --filters "Name=resource-id,Values=${EC2_INSTANCE_ID}" --region ${EC2_REGION} --output text|grep config-base-path|  awk '{print $5}' )
-echo "CONFIG_BASE_PATH=${CONFIG_BASE_PATH}"
+# set up variables based on aws metadata etc
+. $(dirname $0)/set-aws-vars.sh
 
 # Check S3 and Config can be reached
 aws s3 ls ${CONFIG_BASE_PATH} >/dev/null
@@ -47,7 +28,7 @@ cd ${INSTANCE_DIR}/${APP_INSTANCE_NAME}
 
 # Copy properties, docker-compose file, app versions, etc. recursively to current directory
 aws s3 cp ${CONFIG_BASE_PATH}/ ./ --recursive --exclude "*/*"
-aws s3 cp ${CONFIG_BASE_PATH}/${APP_INSTANCE_NAME}/ ./ --recursive --exclude "*/*"
+aws s3 cp ${CONFIG_BASE_PATH}/${APP_INSTANCE_NAME}/ ./ --recursive
 
 # Get and source application versions to use for Docker Compose
 # CIC_APACHE_IMAGE
@@ -67,6 +48,10 @@ do
 done
 
 set +a
+
+### Prune docker images
+echo "Pruning all docker images not currently in use ..."
+docker image prune -a --force
 
 ### RUN DOCKER COMPOSE
 echo "Starting docker compose file ..."
