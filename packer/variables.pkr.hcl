@@ -96,3 +96,15 @@ variable "nagios_api_key" {
   default     = ""
   description = "This key will be supplied to the Nagios agent Ansible role to populate jinja templates"
 }
+
+variable "swap_volume_device_node" {
+  type        = string
+  default     = "/dev/xvdb"
+  description = "The device node identifier for the swap volume"
+}
+
+variable "swap_volume_size_gb" {
+  type        = number
+  default     = 5
+  description = "The EC2 instance swap volume size in Gibibytes (GiB); set to 0 to disable swap volume"
+}
