@@ -35,6 +35,6 @@ for CRON_DIR in ${INSTANCE_DIR}/${APP_INSTANCE_NAME}/*-cron/; do
     echo "Updating cron for container $CONTAINER_NAME (based on image $IMAGE_NAME)"
     docker exec -u weblogic -it $CONTAINER_NAME bash -c "crontab ./cron/crontab.txt"
     echo "Confirming update - current first line of loaded crontab is:"
-	docker exec -u weblogic -it $CONTAINER_NAME bash -c "crontab -l | head -1"
+    docker exec -u weblogic -it $CONTAINER_NAME bash -c "crontab -l | head -1"
   fi
 done
