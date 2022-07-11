@@ -25,16 +25,18 @@ fi
 # Copy config subdirectory content (i.e. crontab) recursively to matching directory
 aws s3 cp ${CONFIG_BASE_PATH}/${APP_INSTANCE_NAME}/ ${INSTANCE_DIR}/${APP_INSTANCE_NAME}/ --recursive
 
-for CRON_DIR in ${INSTANCE_DIR}/${APP_INSTANCE_NAME}/*-cron/; do
-  IMAGE_NAME=$(basename $CRON_DIR | sed 's/-cron//g')
-  CONTAINER_NAME=$(docker ps | awk '{ print $2," ",$NF }' | grep $IMAGE_NAME | awk '{ print $2 }')
-  if [ $(wc -w <<< $CONTAINER_NAME) -gt 1 ]; then
-    echo "ERROR: Skipping cron update for the following containers (based on image $IMAGE_NAME) as multiple containers not expected:"
-    echo "$CONTAINER_NAME"
-  else
-    echo "Updating cron for container $CONTAINER_NAME (based on image $IMAGE_NAME)"
+for CRON_DIR in ${INSTANCE_DIR}/${APP_INSTANCE_NAME}/*-cron; do
+  echo "~~~ Cron directory found: ${CRON_DIR}"
+  CONTAINER_NAME=$(docker ps --filter "volume=$CRON_DIR" --format "{{.Names}}")
+  if [ $(wc -w <<< $CONTAINER_NAME) -eq 1 ]; then
+    echo "Updating cron for container $CONTAINER_NAME"
     docker exec -u weblogic -it $CONTAINER_NAME bash -c "crontab ./cron/crontab.txt"
     echo "Confirming update - current first line of loaded crontab is:"
     docker exec -u weblogic -it $CONTAINER_NAME bash -c "crontab -l | head -1"
+  elif [ $(wc -w <<< $CONTAINER_NAME) -gt 1 ]; then
+    echo "ERROR: Multiple containers found that mount this cron dir, skipping cron update:"
+    echo "$CONTAINER_NAME"
+  else
+    echo "WARNING: No container found that mounts ${CRON_DIR}"
   fi
 done
