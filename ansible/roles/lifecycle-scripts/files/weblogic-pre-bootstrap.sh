@@ -5,7 +5,7 @@ echo " ~~~~~~~~~ Starting initial steps pre-bootstrap : `date -u "+%F %T"`"
 set -a
 
 echo Load variables from AWS
-. $(dirname $0)/set-aws-vars.sh
+. set-aws-vars.sh
 
 echo delete lok file then move and copy back all servers data store default DAT file
 for SERVER in wladmin wlserver1 wlserver2 wlserver3 wlserver4
