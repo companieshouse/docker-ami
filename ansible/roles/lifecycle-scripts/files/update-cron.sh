@@ -12,7 +12,7 @@ exec > >(tee -ai ~/updatecron.log) 2>&1
 echo " ~~~~~~~~~ Starting cron update script: `date -u "+%F %T"`"
 
 # set up variables based on aws metadata etc
-. $(dirname $0)/set-aws-vars.sh
+. set-aws-vars.sh
 
 # Check S3 and Config can be reached
 aws s3 ls ${CONFIG_BASE_PATH} >/dev/null
