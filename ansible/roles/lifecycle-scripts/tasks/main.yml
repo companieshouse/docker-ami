@@ -5,6 +5,18 @@
     dest: "/usr/local/bin/bootstrap"
     mode: 0755
 
+- name: Copy variable setting helper script
+  copy:
+    src: "set-aws-vars.sh"
+    dest: "/usr/local/bin/set-aws-vars.sh"
+    mode: 0755
+
+- name: Copy cron update script
+  copy:
+    src: "update-cron.sh"
+    dest: "/usr/local/bin/update-cron.sh"
+    mode: 0755
+
 - name: Copy dns script
   copy:
     src: "update-dns.sh"
