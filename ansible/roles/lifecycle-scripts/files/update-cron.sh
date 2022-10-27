@@ -29,10 +29,11 @@ for CRON_DIR in ${INSTANCE_DIR}/${APP_INSTANCE_NAME}/*-cron; do
   echo "~~~ Cron directory found: ${CRON_DIR}"
   CONTAINER_NAME=$(docker ps --filter "volume=$CRON_DIR" --format "{{.Names}}")
   if [ $(wc -w <<< $CONTAINER_NAME) -eq 1 ]; then
-    echo "Updating cron for container $CONTAINER_NAME"
-    docker exec -u weblogic -it $CONTAINER_NAME bash -c "crontab ./cron/crontab.txt"
+    CONTAINER_USER=$(basename $CRON_DIR | awk -F- '{print $2}')
+    echo "Updating cron for user $CONTAINER_USER in container $CONTAINER_NAME"
+    docker exec -u $CONTAINER_USER -it $CONTAINER_NAME bash -c "crontab ./cron/crontab.txt"
     echo "Confirming update - current first line of loaded crontab is:"
-    docker exec -u weblogic -it $CONTAINER_NAME bash -c "crontab -l | head -1"
+    docker exec -u $CONTAINER_USER -it $CONTAINER_NAME bash -c "crontab -l | head -1"
   elif [ $(wc -w <<< $CONTAINER_NAME) -gt 1 ]; then
     echo "ERROR: Multiple containers found that mount this cron dir, skipping cron update:"
     echo "$CONTAINER_NAME"
