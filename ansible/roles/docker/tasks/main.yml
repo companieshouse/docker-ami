@@ -34,6 +34,11 @@
     groups: docker
     append: yes
 
+- name: Set Docker default config
+  copy:
+    dest: /etc/docker/daemon.json
+    content: "{{ docker_daemon_config | to_json }}"
+
 - name: service docker
   service:
     name: docker

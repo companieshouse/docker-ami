@@ -51,3 +51,8 @@ nrpe_command:
     sudo: true
     script: check_docker
     option: $ARG1$
+
+## Docker daemon config
+docker_daemon_config: 
+  log-opts: 
+    max-size: 1g
