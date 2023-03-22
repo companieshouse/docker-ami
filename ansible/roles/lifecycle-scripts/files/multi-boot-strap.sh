@@ -26,7 +26,7 @@ ENVIRONMENTS=$(aws s3 ls ${CONFIG_BASE_PATH}/ | grep PRE | awk '{print $2}' | tr
 
 for ENVIRONMENT in ${ENVIRONMENTS}
 do
-  ./bootstrap ${ENVIRONMENT} &
+  bootstrap ${ENVIRONMENT} &
 done
 
 
