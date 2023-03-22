@@ -3,11 +3,17 @@
 ### Script to start Docker containers using Docker Compose.
 ### Requires values to be supplied as tags on the EC2 instance where it runs:
 ###   ApplicationType  (the name of the application type - e.g. cics or chips etc)
-###   app-instance-name  (the name of the application instance type - e.g. cics1 or chips-ef-batch1 etc)
+###   app-instance-name  (the name of the application instance type - e.g. cics1 or chips-ef-batch1 etc) - if a parameter is supplied to this script, it will override the value obtained from tags.
 ###   config-base-path (the S3 path to where the config is stored - e.g. s3://shared-services.eu-west-2.configs.ch.gov.uk/cic-configs/development etc)
 ### The tags are defined in terraform code and set as values on the launch configuration that is used by the Auto Scaling Group to create EC2 instances.
 
-exec > >(tee -ai ~/start-up.log) 2>&1
+LOG_FILE=~/start-up.log
+# Use a dedicated log if $1 supplied
+if [ ! -z  "$1" ]; then
+  LOG_FILE=~/$1-start-up.log
+fi
+
+exec > >(tee -ai ${LOG_FILE}) 2>&1
 echo " ~~~~~~~~~ Starting Docker Compose wrapper script: `date -u "+%F %T"`"
 set -a
 
@@ -22,6 +28,11 @@ if (( $? != 0 )) ; then
   exit 1
 fi
 
+# Set APP_INSTANCE_NAME env var to $1 if supplied
+if [ ! -z  "$1" ]; then
+  APP_INSTANCE_NAME=$1
+fi
+
 # create server instance directory
 mkdir -p ${INSTANCE_DIR}/${APP_INSTANCE_NAME}/running-servers
 cd ${INSTANCE_DIR}/${APP_INSTANCE_NAME}
@@ -31,10 +42,8 @@ aws s3 cp ${CONFIG_BASE_PATH}/ ./ --recursive --exclude "*/*"
 aws s3 cp ${CONFIG_BASE_PATH}/${APP_INSTANCE_NAME}/ ./ --recursive
 
 # Get and source application versions to use for Docker Compose
-# CIC_APACHE_IMAGE
-# CIC_APP_IMAGE
+# Also soruces any additional vars set in app-image-versions, such as APP_INSTANCE_NUMBER
 . app-image-versions
-
 echo "`env`" | grep IMAGE
 
 # Get ECR Repo details and log into ECR

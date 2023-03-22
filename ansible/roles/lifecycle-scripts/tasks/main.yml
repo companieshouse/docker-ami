@@ -5,6 +5,12 @@
     dest: "/usr/local/bin/bootstrap"
     mode: 0755
 
+- name: Copy multi bootstrap script
+  copy:
+    src: "multi-boot-strap.sh"
+    dest: "/usr/local/bin/multi-bootstrap"
+    mode: 0755
+
 - name: Copy variable setting helper script
   copy:
     src: "set-aws-vars.sh"
