@@ -11,6 +11,7 @@
       vars:
         install_watcher_service: false
     - sshfs
+    - appdynamics-machine-agent
   tasks:
     - name: Suppress auditd logging to rsyslog
       ansible.builtin.lineinfile:
