@@ -13,6 +13,8 @@
     group: ec2-user   
     
 - name: Download agent from S3
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
   amazon.aws.aws_s3:
     bucket: "{{ aws_s3_dev_resources_bucket }}"
     object: "packages/appdynamics/machineagent-bundle-64bit-linux-{{ agent_version }}.zip"
