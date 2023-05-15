@@ -1,0 +1,41 @@
+---
+- name: Get pre-requisites needed for aws_s3 module
+  pip:
+    executable: "pip3"
+    name: ['boto3']
+
+- name: Create agent directory
+  ansible.builtin.file:
+    path: "/home/ec2-user/machineagent"
+    state: directory
+    mode: '0750'
+    owner: ec2-user
+    group: ec2-user   
+    
+- name: Download agent from S3
+  amazon.aws.aws_s3:
+    bucket: "{{ aws_s3_dev_resources_bucket }}"
+    object: "packages/appdynamics/machineagent-bundle-64bit-linux-{{ agent_version }}.zip"
+    dest: "/home/ec2-user/machineagent/machineagent-bundle-64bit-linux.zip"
+    mode: get
+
+- name: Unarchive agent
+  ansible.builtin.unarchive:
+    src: "/home/ec2-user/machineagent/machineagent-bundle-64bit-linux.zip"
+    dest: "/home/ec2-user/machineagent"
+    remote_src: yes
+    owner: ec2-user
+    group: ec2-user
+
+- name: Link /hostroot to / as required by machine agent
+  ansible.builtin.file:
+    src: /
+    dest: /hostroot
+    state: link
+
+- name: Remove machine agent zip
+  ansible.builtin.file:
+    path: "/home/ec2-user/machineagent/machineagent-bundle-64bit-linux.zip"
+    state: absent
+
+

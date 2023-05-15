@@ -108,3 +108,8 @@ variable "swap_volume_size_gb" {
   default     = 5
   description = "The EC2 instance swap volume size in Gibibytes (GiB); set to 0 to disable swap volume"
 }
+
+variable "aws_s3_dev_resources_bucket" {
+  type        = string
+  description = "Bucket that contains any artifacts required to complete the build process, will be passed to Ansible"
+}
