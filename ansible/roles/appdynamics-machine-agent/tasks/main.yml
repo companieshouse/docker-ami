@@ -40,4 +40,10 @@
     path: "/home/ec2-user/machineagent/machineagent-bundle-64bit-linux.zip"
     state: absent
 
+- name: Copy machine agent start script
+  copy:
+    src: "start-appd-machine-agent.sh"
+    dest: "/home/ec2-user/machineagent/start-appd-machine-agent.sh"
+    mode: 0755
+
 
