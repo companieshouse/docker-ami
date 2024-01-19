@@ -10,20 +10,24 @@ source "amazon-ebs" "builder" {
   iam_instance_profile = "packer-builders-${var.aws_region}"
 
   launch_block_device_mappings {
-    device_name = "/dev/xvda"
-    volume_size = var.root_volume_size_gb
-    volume_type = "gp3"
+    device_name           = "/dev/xvda"
+    volume_size           = var.root_volume_size_gb
+    volume_type           = "gp3"
     delete_on_termination = true
+    iops                  = var.root_volume_iops
+    throughput            = var.root_volume_throughput
   }
 
   dynamic "launch_block_device_mappings" {
     for_each = var.swap_volume_size_gb > 0 ? [1] : []
 
     content {
-      device_name = var.swap_volume_device_node
-      volume_size = var.swap_volume_size_gb
-      volume_type = "gp3"
+      device_name           = var.swap_volume_device_node
+      volume_size           = var.swap_volume_size_gb
+      volume_type           = "gp3"
       delete_on_termination = true
+      iops                  = var.swap_volume_iops
+      throughput            = var.swap_volume_throughput
     }
   }
 
