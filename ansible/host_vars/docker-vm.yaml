@@ -56,3 +56,6 @@ nrpe_command:
 docker_daemon_config: 
   log-opts: 
     max-size: 1g
+  default-address-pools:
+    - base: 172.17.0.0/16
+      size: 24
