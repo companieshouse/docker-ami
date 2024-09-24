@@ -17,6 +17,12 @@
     dest: "/usr/local/bin/set-aws-vars.sh"
     mode: 0755
 
+- name: Copy lookup-secrets.sh script
+  copy:
+    src: "lookup-secrets.sh"
+    dest: "/usr/local/bin/lookup-secrets.sh"
+    mode: 0755
+
 - name: Copy cron update script
   copy:
     src: "update-cron.sh"

@@ -41,6 +41,9 @@ cd ${INSTANCE_DIR}/${APP_INSTANCE_NAME}
 aws s3 cp ${CONFIG_BASE_PATH}/ ./ --recursive --exclude "*/*"
 aws s3 cp ${CONFIG_BASE_PATH}/${APP_INSTANCE_NAME}/ ./ --recursive
 
+# Process any properties files to lookup parameter store values
+lookup-secrets.sh
+
 # Get and source application versions to use for Docker Compose
 # Also soruces any additional vars set in app-image-versions, such as APP_INSTANCE_NUMBER
 . app-image-versions
