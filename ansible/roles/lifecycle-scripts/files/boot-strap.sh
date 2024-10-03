@@ -33,6 +33,9 @@ if [ ! -z  "$1" ]; then
   APP_INSTANCE_NAME=$1
 fi
 
+# Provide uppercase APP_INSTANCE_NAME
+APP_INSTANCE_NAME_UPPER="${APP_INSTANCE_NAME^^}"
+
 # create server instance directory
 mkdir -p ${INSTANCE_DIR}/${APP_INSTANCE_NAME}/running-servers
 cd ${INSTANCE_DIR}/${APP_INSTANCE_NAME}
