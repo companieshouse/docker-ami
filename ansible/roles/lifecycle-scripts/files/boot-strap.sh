@@ -66,8 +66,8 @@ set +a
 
 ### Prune docker images
 echo "Pruning all docker images not currently in use ..."
-docker image prune -a --force
+docker image prune -a --force --filter "until=168h"
 
 ### RUN DOCKER COMPOSE
 echo "Starting docker compose file ..."
-docker-compose up -d
+docker-compose up -d ${BOOTSTRAP_SERVICE_LIST}
