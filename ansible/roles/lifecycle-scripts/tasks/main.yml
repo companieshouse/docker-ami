@@ -17,6 +17,12 @@
     dest: "/usr/local/bin/set-aws-vars.sh"
     mode: 0755
 
+- name: Copy load-cached-images script
+  copy:
+    src: "load-cached-images.sh"
+    dest: "/usr/local/bin/load-cached-images.sh"
+    mode: 0755
+
 - name: Copy lookup-secrets.sh script
   copy:
     src: "lookup-secrets.sh"
