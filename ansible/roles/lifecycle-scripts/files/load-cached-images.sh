@@ -5,7 +5,7 @@
 ### This loads the latest locally built images (that will not have been published to ECR)
 ### after an EC2 instance restart/recreation.
 ### This is also used to load images prior to bootstrap on environments with multiple EC2 instances,
-### where the images would not otherwise be available to additonal instances.
+### where the images would not otherwise be available to additional instances.
 ### The tar files are located in the NFS INSTANCE_DIR/image-cache directory and
 ### all images matching the pattern *-<environment-name>-*.tar will be loaded.
 
