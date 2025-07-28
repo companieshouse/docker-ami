@@ -1,12 +1,12 @@
 #!/bin/bash
 
-### Script to load cached Docker images from tar files in a shared NFS image-cache directory.
+### Script to load cached Docker images from tar files in a shared NFS docker-image-cache directory.
 ###
 ### This loads the latest locally built images (that will not have been published to ECR)
 ### after an EC2 instance restart/recreation.
 ### This is also used to load images prior to bootstrap on environments with multiple EC2 instances,
 ### where the images would not otherwise be available to additional instances.
-### The tar files are located in the NFS INSTANCE_DIR/image-cache directory and
+### The tar files are located in the NFS INSTANCE_DIR/docker-image-cache directory and
 ### all images matching the pattern *-<environment-name>-*.tar will be loaded.
 
 LOG_FILE=~/load-cached-images.log
@@ -17,7 +17,7 @@ echo " ~~~~~~~~~ Starting loading of cached images: `date -u "+%F %T"`"
 # set up variables based on aws metadata etc
 . set-aws-vars.sh
 
-IMAGE_CACHE_DIR=${INSTANCE_DIR}/image-cache
+IMAGE_CACHE_DIR=${INSTANCE_DIR}/docker-image-cache
 cd ${IMAGE_CACHE_DIR}
 
 # Derive a consistent environment name
