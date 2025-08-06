@@ -23,6 +23,12 @@
     dest: "/usr/local/bin/load-cached-images.sh"
     mode: 0755
 
+- name: Copy set-container-alias script
+  copy:
+    src: "set-container-alias.sh"
+    dest: "/usr/local/bin/set-container-alias.sh"
+    mode: 0755
+
 - name: Copy lookup-secrets.sh script
   copy:
     src: "lookup-secrets.sh"
