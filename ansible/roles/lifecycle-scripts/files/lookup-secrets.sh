@@ -23,7 +23,7 @@ function processPropertyFile() {
     if [[ EXIT_CODE -eq 0 ]]; then
       ESCAPED_VALUE=$( printf '%s\n' "${VALUE}" | sed -e 's/[\/&]/\\&/g' )
       ESCAPED_PATH=$( printf '%s\n' "${PATH_TO_LOOKUP}" | sed -e 's/[]\/$*.^[]/\\&/g' )
-      sed -i "s/@${ESCAPED_PATH}/\$\{${KEY}\}/g" ${PROPERTIES_FILE}
+      sed -i "s/@${ESCAPED_PATH}\"/\$\{${KEY}\}\"/g" ${PROPERTIES_FILE}
       export "${KEY}=${ESCAPED_VALUE}"
     elif [[ EXIT_CODE -eq 255 ]]; then
       echo "No value found for path ${PATH_TO_LOOKUP}"
