@@ -50,7 +50,7 @@ aws s3 cp ${CONFIG_BASE_PATH}/${APP_INSTANCE_NAME}/ ./ --recursive
 # Get and source application versions to use for Docker Compose
 # Also soruces any additional vars set in app-image-versions, such as APP_INSTANCE_NUMBER
 . app-image-versions
-echo "`env`" | grep IMAGE
+cat app-image-versions
 
 # Get ECR Repo details and log into ECR
 AWS_ECR_REPO_DOMAIN=amazonaws.com
