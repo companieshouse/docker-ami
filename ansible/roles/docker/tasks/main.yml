@@ -20,6 +20,7 @@
     lock_timeout: 180
     exclude:
       - jq
+      - oniguruma*
 
 - name: Remove /etc/yum.repos.d/docker-ce.repo as will resolve to invalid repo path with Amazon Linux 2
   ansible.builtin.file:
